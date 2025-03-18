@@ -1,10 +1,15 @@
-#PySepaDD - Generate SEPA Direct Debit XML
+# PySepaDD - Generate SEPA Direct Debit XML
 
-PySepaDD is a python class to generate SEPA PAIN.008.001.02 compliant Direct Debit XML files. 
+PySepaDD is a python class to generate SEPA PAIN.008.001.02 compliant Direct Debit XML files.
 
-##Configuring
+## This library is not actively maintained anymore
 
-####Parameters
+This means that there are no more bug fixes or security fixes.
+
+## Configuring
+
+### Parameters
+
 When intializing PySepaDD you MUST supply a config dictionary, the dictionary requires the following parameters:
 * (String)  `name`       : The name of the creditor.
 * (String)  `IBAN`       : The International Bank Account Number of the creditor.
@@ -13,13 +18,15 @@ When intializing PySepaDD you MUST supply a config dictionary, the dictionary re
 * (String)  `creditor_id`: The creditor identification. (Supplied by your bank).
 * (String)  `currency`   : The creditors currency. (ISO 4217)
 
-####Errors
+### Errors
+
 The initialization will throw an `Exception` when the config does not validate. The Exception contains a concatenated string (prepended by `Config file did not validate. ` with the (capitalized) items that are missing. For example:
 
 `Config file did not validate. NAME_MISSING BATCH_MISSING`
 
 
-####Example
+### Example
+
 ```python
 config = {"name": "Test von Testenstein",
           "IBAN": "NL50BANK1234567890",
@@ -31,10 +38,12 @@ config = {"name": "Test von Testenstein",
 sepa = PySepaDD(config)
 ```
 
-##Adding Payments
+## Adding Payments
+
 After initializing with a config, you can add payments with the `add_payment(payment_dict)` function, for which you will have to supply a payment dictionary. 
 
-####Parameters
+### Parameters
+
 The payment dictionary requires the following parameters:
 * (String)        `name`           : The name of the debtor.
 * (String)        `IBAN`           : The International Bank Account Number of the debtor.
@@ -46,7 +55,8 @@ The payment dictionary requires the following parameters:
 * (datetime.date) `mandate_date`   : The signing date of the mandate.
 * (String)        `description`    : The description for the debtor. (Max 140 char alphanumeric).
 
-####Errors
+### Errors
+
 The ```add_payments(payment_dict)``` method will throw an `Exception` when the payment does not validate. The Exception contains a concatenated string with the following (combined) possibilities:
 * `AMOUNT_NOT_INTEGER`
 
@@ -58,7 +68,8 @@ The ```add_payments(payment_dict)``` method will throw an `Exception` when the p
 
    The collection date is not a proper `datetime.date` instance (perhaps it is a string?).
 
-####Example
+### Example
+
 ```python
 payment = {"name": "Test von Testenstein",
             "IBAN": "NL50BANK1234567890",
@@ -73,26 +84,29 @@ payment = {"name": "Test von Testenstein",
 sepa.add_payment(payment)
 ```
 
+## Exporting
 
-
-##Exporting
 To create the direct debit XML file, use the `export()` function. This will return a string containing the file contents.
 
-####Example
+### Example
+
 ```python
 contents = sepa.export()
 print contents
 ```
 
-##Helpers
+## Helpers
 
-####`int_to_decimal_str(int)`
+### `int_to_decimal_str(int)`
+
 This will convert your integers (cents) back to a decimal string (full currency, for example Euro's) with full stop separator and no thousand separators. It will not use divisions, so there will never be floating point errors.
 
-####`decimal_str_to_int(str)`
+### `decimal_str_to_int(str)`
+
 This will convert your decimal strings (full currency, for example Euro's) with full stop separator and no thousand separators to an integer. (cents) It will not use divisions, so there will never be floating point errors.
 
-####`check_payment(payment_dict)`
+### `check_payment(payment_dict)`
+
 This will check your payment dictionary, but will not throw an exception when invalid. It will return either `True` indicating that your payment is valid, or it will return a string containing error messages as mentioned in the Adding Payments section.
 
 License
